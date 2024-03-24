@@ -28,13 +28,13 @@ bp = Blueprint("routes", __name__, static_folder="static", template_folder="stat
 MINIMUM_SUPPORTED_AZURE_OPENAI_PREVIEW_API_VERSION="2024-02-15-preview"
 
 # UI configuration (optional)
-UI_TITLE = os.environ.get("UI_TITLE") or "Contoso"
-UI_LOGO = os.environ.get("UI_LOGO")
+UI_TITLE = os.environ.get("UI_TITLE") or "N-ERGIE"
+UI_LOGO = "n.svg"
 UI_CHAT_LOGO = os.environ.get("UI_CHAT_LOGO")
-UI_CHAT_TITLE = os.environ.get("UI_CHAT_TITLE") or "Start chatting"
-UI_CHAT_DESCRIPTION = os.environ.get("UI_CHAT_DESCRIPTION") or "This chatbot is configured to answer your questions"
+UI_CHAT_TITLE = os.environ.get("UI_CHAT_TITLE") or "Geben Sie Ihre Frage ein"
+UI_CHAT_DESCRIPTION = os.environ.get("UI_CHAT_DESCRIPTION") or "Ich bin Ihr KI-Assistent."
 UI_FAVICON = os.environ.get("UI_FAVICON") or "/favicon.ico"
-UI_SHOW_SHARE_BUTTON = os.environ.get("UI_SHOW_SHARE_BUTTON", "true").lower() == "true"
+UI_SHOW_SHARE_BUTTON = os.environ.get("UI_SHOW_SHARE_BUTTON", "false").lower() == "false"
 
 def create_app():
     app = Quart(__name__)
@@ -110,7 +110,7 @@ AZURE_COSMOSDB_MONGO_VCORE_DATABASE = os.environ.get("AZURE_COSMOSDB_MONGO_VCORE
 AZURE_COSMOSDB_MONGO_VCORE_CONTAINER = os.environ.get("AZURE_COSMOSDB_MONGO_VCORE_CONTAINER")
 AZURE_COSMOSDB_MONGO_VCORE_INDEX = os.environ.get("AZURE_COSMOSDB_MONGO_VCORE_INDEX")
 AZURE_COSMOSDB_MONGO_VCORE_TOP_K = os.environ.get("AZURE_COSMOSDB_MONGO_VCORE_TOP_K", AZURE_SEARCH_TOP_K)
-AZURE_COSMOSDB_MONGO_VCORE_STRICTNESS = os.environ.get("AZURE_COSMOSDB_MONGO_VCORE_STRICTNESS", AZURE_SEARCH_STRICTNESS)  
+AZURE_COSMOSDB_MONGO_VCORE_STRICTNESS = os.environ.get("AZURE_COSMOSDB_MONGO_VCORE_STRICTNESS", AZURE_SEARCH_STRICTNESS)
 AZURE_COSMOSDB_MONGO_VCORE_ENABLE_IN_DOMAIN = os.environ.get("AZURE_COSMOSDB_MONGO_VCORE_ENABLE_IN_DOMAIN", AZURE_SEARCH_ENABLE_IN_DOMAIN)
 AZURE_COSMOSDB_MONGO_VCORE_CONTENT_COLUMNS = os.environ.get("AZURE_COSMOSDB_MONGO_VCORE_CONTENT_COLUMNS", "")
 AZURE_COSMOSDB_MONGO_VCORE_FILENAME_COLUMN = os.environ.get("AZURE_COSMOSDB_MONGO_VCORE_FILENAME_COLUMN")
@@ -147,7 +147,7 @@ PINECONE_ENVIRONMENT = os.environ.get("PINECONE_ENVIRONMENT")
 PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
 PINECONE_INDEX_NAME = os.environ.get("PINECONE_INDEX_NAME")
 PINECONE_TOP_K = os.environ.get("PINECONE_TOP_K", SEARCH_TOP_K)
-PINECONE_STRICTNESS = os.environ.get("PINECONE_STRICTNESS", SEARCH_STRICTNESS)  
+PINECONE_STRICTNESS = os.environ.get("PINECONE_STRICTNESS", SEARCH_STRICTNESS)
 PINECONE_ENABLE_IN_DOMAIN = os.environ.get("PINECONE_ENABLE_IN_DOMAIN", SEARCH_ENABLE_IN_DOMAIN)
 PINECONE_CONTENT_COLUMNS = os.environ.get("PINECONE_CONTENT_COLUMNS", "")
 PINECONE_FILENAME_COLUMN = os.environ.get("PINECONE_FILENAME_COLUMN")
@@ -160,7 +160,7 @@ AZURE_MLINDEX_NAME = os.environ.get("AZURE_MLINDEX_NAME")
 AZURE_MLINDEX_VERSION = os.environ.get("AZURE_MLINDEX_VERSION")
 AZURE_ML_PROJECT_RESOURCE_ID = os.environ.get("AZURE_ML_PROJECT_RESOURCE_ID") # /subscriptions/{sub ID}/resourceGroups/{rg name}/providers/Microsoft.MachineLearningServices/workspaces/{AML project name}
 AZURE_MLINDEX_TOP_K = os.environ.get("AZURE_MLINDEX_TOP_K", SEARCH_TOP_K)
-AZURE_MLINDEX_STRICTNESS = os.environ.get("AZURE_MLINDEX_STRICTNESS", SEARCH_STRICTNESS)  
+AZURE_MLINDEX_STRICTNESS = os.environ.get("AZURE_MLINDEX_STRICTNESS", SEARCH_STRICTNESS)
 AZURE_MLINDEX_ENABLE_IN_DOMAIN = os.environ.get("AZURE_MLINDEX_ENABLE_IN_DOMAIN", SEARCH_ENABLE_IN_DOMAIN)
 AZURE_MLINDEX_CONTENT_COLUMNS = os.environ.get("AZURE_MLINDEX_CONTENT_COLUMNS", "")
 AZURE_MLINDEX_FILENAME_COLUMN = os.environ.get("AZURE_MLINDEX_FILENAME_COLUMN")
@@ -174,8 +174,8 @@ AZURE_MLINDEX_QUERY_TYPE = os.environ.get("AZURE_MLINDEX_QUERY_TYPE")
 AUTH_ENABLED = os.environ.get("AUTH_ENABLED", "true").lower() == "true"
 CHAT_HISTORY_ENABLED = AZURE_COSMOSDB_ACCOUNT and AZURE_COSMOSDB_DATABASE and AZURE_COSMOSDB_CONVERSATIONS_CONTAINER
 SANITIZE_ANSWER = os.environ.get("SANITIZE_ANSWER", "false").lower() == "true"
-frontend_settings = { 
-    "auth_enabled": AUTH_ENABLED, 
+frontend_settings = {
+    "auth_enabled": AUTH_ENABLED,
     "feedback_enabled": AZURE_COSMOSDB_ENABLE_FEEDBACK and CHAT_HISTORY_ENABLED,
     "ui": {
         "title": UI_TITLE,
@@ -194,22 +194,22 @@ def should_use_data():
         DATASOURCE_TYPE = "AzureCognitiveSearch"
         logging.debug("Using Azure Cognitive Search")
         return True
-    
+
     if AZURE_COSMOSDB_MONGO_VCORE_DATABASE and AZURE_COSMOSDB_MONGO_VCORE_CONTAINER and AZURE_COSMOSDB_MONGO_VCORE_INDEX and AZURE_COSMOSDB_MONGO_VCORE_CONNECTION_STRING:
         DATASOURCE_TYPE = "AzureCosmosDB"
         logging.debug("Using Azure CosmosDB Mongo vcore")
         return True
-    
+
     if ELASTICSEARCH_ENDPOINT and ELASTICSEARCH_ENCODED_API_KEY and ELASTICSEARCH_INDEX:
         DATASOURCE_TYPE = "Elasticsearch"
         logging.debug("Using Elasticsearch")
         return True
-    
+
     if PINECONE_ENVIRONMENT and PINECONE_API_KEY and PINECONE_INDEX_NAME:
         DATASOURCE_TYPE = "Pinecone"
         logging.debug("Using Pinecone")
         return True
-    
+
     if AZURE_MLINDEX_NAME and AZURE_MLINDEX_VERSION and AZURE_ML_PROJECT_RESOURCE_ID:
         DATASOURCE_TYPE = "AzureMLIndex"
         logging.debug("Using Azure ML Index")
@@ -226,13 +226,13 @@ def init_openai_client(use_data=SHOULD_USE_DATA):
         # API version check
         if AZURE_OPENAI_PREVIEW_API_VERSION < MINIMUM_SUPPORTED_AZURE_OPENAI_PREVIEW_API_VERSION:
             raise Exception(f"The minimum supported Azure OpenAI preview API version is '{MINIMUM_SUPPORTED_AZURE_OPENAI_PREVIEW_API_VERSION}'")
-        
+
         # Endpoint
         if not AZURE_OPENAI_ENDPOINT and not AZURE_OPENAI_RESOURCE:
             raise Exception("AZURE_OPENAI_ENDPOINT or AZURE_OPENAI_RESOURCE is required")
-        
+
         endpoint = AZURE_OPENAI_ENDPOINT if AZURE_OPENAI_ENDPOINT else f"https://{AZURE_OPENAI_RESOURCE}.openai.azure.com/"
-        
+
         # Authentication
         aoai_api_key = AZURE_OPENAI_KEY
         ad_token_provider = None
@@ -257,7 +257,7 @@ def init_openai_client(use_data=SHOULD_USE_DATA):
             default_headers=default_headers,
             azure_endpoint=endpoint
         )
-            
+
         return azure_openai_client
     except Exception as e:
         logging.exception("Exception in Azure OpenAI initialization", e)
@@ -277,8 +277,8 @@ def init_cosmosdb_client():
                 credential = AZURE_COSMOSDB_ACCOUNT_KEY
 
             cosmos_conversation_client = CosmosConversationClient(
-                cosmosdb_endpoint=cosmos_endpoint, 
-                credential=credential, 
+                cosmosdb_endpoint=cosmos_endpoint,
+                credential=credential,
                 database_name=AZURE_COSMOSDB_DATABASE,
                 container_name=AZURE_COSMOSDB_CONVERSATIONS_CONTAINER,
                 enable_message_feedback=AZURE_COSMOSDB_ENABLE_FEEDBACK
@@ -289,7 +289,7 @@ def init_cosmosdb_client():
             raise e
     else:
         logging.debug("CosmosDB not configured")
-        
+
     return cosmos_conversation_client
 
 
@@ -314,7 +314,7 @@ def get_configured_data_source():
 
             filter = generateFilterString(userToken)
             logging.debug(f"FILTER: {filter}")
-        
+
         # Set authentication
         authentication = {}
         if AZURE_SEARCH_KEY:
@@ -362,7 +362,7 @@ def get_configured_data_source():
                     },
                     "index_name": AZURE_COSMOSDB_MONGO_VCORE_INDEX,
                     "database_name": AZURE_COSMOSDB_MONGO_VCORE_DATABASE,
-                    "container_name": AZURE_COSMOSDB_MONGO_VCORE_CONTAINER,                    
+                    "container_name": AZURE_COSMOSDB_MONGO_VCORE_CONTAINER,
                     "fields_mapping": {
                         "content_fields": parse_multi_columns(AZURE_COSMOSDB_MONGO_VCORE_CONTENT_COLUMNS) if AZURE_COSMOSDB_MONGO_VCORE_CONTENT_COLUMNS else [],
                         "title_field": AZURE_COSMOSDB_MONGO_VCORE_TITLE_COLUMN if AZURE_COSMOSDB_MONGO_VCORE_TITLE_COLUMN else None,
@@ -532,9 +532,9 @@ def prepare_model_args(request_body):
             for field in embeddingDependency["authentication"]:
                 if field in secret_params:
                     model_args_clean["extra_body"]["data_sources"][0]["parameters"]["embedding_dependency"]["authentication"][field] = "*****"
-        
+
     logging.debug(f"REQUEST BODY: {json.dumps(model_args_clean, indent=4)}")
-    
+
     return model_args
 
 async def send_chat_request(request):
@@ -577,7 +577,7 @@ async def conversation_internal(request_body):
         else:
             result = await complete_chat_request(request_body)
             return jsonify(result)
-    
+
     except Exception as ex:
         logging.exception(ex)
         if hasattr(ex, "status_code"):
@@ -591,18 +591,18 @@ async def conversation():
     if not request.is_json:
         return jsonify({"error": "request must be json"}), 415
     request_json = await request.get_json()
-    
+
     return await conversation_internal(request_json)
 
-@bp.route("/frontend_settings", methods=["GET"])  
+@bp.route("/frontend_settings", methods=["GET"])
 def get_frontend_settings():
     try:
         return jsonify(frontend_settings), 200
     except Exception as e:
         logging.exception("Exception in /frontend_settings")
-        return jsonify({"error": str(e)}), 500  
+        return jsonify({"error": str(e)}), 500
 
-## Conversation History API ## 
+## Conversation History API ##
 @bp.route("/history/generate", methods=["POST"])
 async def add_conversation():
     authenticated_user = get_authenticated_user_details(request_headers=request.headers)
@@ -626,7 +626,7 @@ async def add_conversation():
             conversation_id = conversation_dict['id']
             history_metadata['title'] = title
             history_metadata['date'] = conversation_dict['createdAt']
-            
+
         ## Format the incoming message object in the "chat/completions" messages format
         ## then write it to the conversation history in cosmos
         messages = request_json["messages"]
@@ -641,15 +641,15 @@ async def add_conversation():
                 raise Exception("Conversation not found for the given conversation ID: " + conversation_id + ".")
         else:
             raise Exception("No user message found")
-        
+
         await cosmos_conversation_client.cosmosdb_client.close()
-        
+
         # Submit request to Chat Completions for response
         request_body = await request.get_json()
         history_metadata['conversation_id'] = conversation_id
         request_body['history_metadata'] = history_metadata
         return await conversation_internal(request_body)
-       
+
     except Exception as e:
         logging.exception("Exception in /history/generate")
         return jsonify({"error": str(e)}), 500
@@ -673,7 +673,7 @@ async def update_conversation():
         # check for the conversation_id, if the conversation is not set, we will create a new one
         if not conversation_id:
             raise Exception("No conversation_id found")
-            
+
         ## Format the incoming message object in the "chat/completions" messages format
         ## then write it to the conversation history in cosmos
         messages = request_json["messages"]
@@ -695,12 +695,12 @@ async def update_conversation():
             )
         else:
             raise Exception("No bot messages found")
-        
+
         # Submit request to Chat Completions for response
         await cosmos_conversation_client.cosmosdb_client.close()
         response = {'success': True}
         return jsonify(response), 200
-       
+
     except Exception as e:
         logging.exception("Exception in /history/update")
         return jsonify({"error": str(e)}), 500
@@ -718,17 +718,17 @@ async def update_message():
     try:
         if not message_id:
             return jsonify({"error": "message_id is required"}), 400
-        
+
         if not message_feedback:
             return jsonify({"error": "message_feedback is required"}), 400
-        
+
         ## update the message in cosmos
         updated_message = await cosmos_conversation_client.update_message_feedback(user_id, message_id, message_feedback)
         if updated_message:
             return jsonify({"message": f"Successfully updated message with feedback {message_feedback}", "message_id": message_id}), 200
         else:
             return jsonify({"error": f"Unable to update message {message_id}. It either does not exist or the user does not have access to it."}), 404
-        
+
     except Exception as e:
         logging.exception("Exception in /history/message_feedback")
         return jsonify({"error": str(e)}), 500
@@ -739,15 +739,15 @@ async def delete_conversation():
     ## get the user id from the request headers
     authenticated_user = get_authenticated_user_details(request_headers=request.headers)
     user_id = authenticated_user['user_principal_id']
-    
+
     ## check request for conversation_id
     request_json = await request.get_json()
     conversation_id = request_json.get('conversation_id', None)
 
-    try: 
+    try:
         if not conversation_id:
             return jsonify({"error": "conversation_id is required"}), 400
-        
+
         ## make sure cosmos is configured
         cosmos_conversation_client = init_cosmosdb_client()
         if not cosmos_conversation_client:
@@ -756,7 +756,7 @@ async def delete_conversation():
         ## delete the conversation messages from cosmos first
         deleted_messages = await cosmos_conversation_client.delete_messages(conversation_id, user_id)
 
-        ## Now delete the conversation 
+        ## Now delete the conversation
         deleted_conversation = await cosmos_conversation_client.delete_conversation(user_id, conversation_id)
 
         await cosmos_conversation_client.cosmosdb_client.close()
@@ -797,10 +797,10 @@ async def get_conversation():
     ## check request for conversation_id
     request_json = await request.get_json()
     conversation_id = request_json.get('conversation_id', None)
-    
+
     if not conversation_id:
         return jsonify({"error": "conversation_id is required"}), 400
-    
+
     ## make sure cosmos is configured
     cosmos_conversation_client = init_cosmosdb_client()
     if not cosmos_conversation_client:
@@ -811,7 +811,7 @@ async def get_conversation():
     ## return the conversation id and the messages in the bot frontend format
     if not conversation:
         return jsonify({"error": f"Conversation {conversation_id} was not found. It either does not exist or the logged in user does not have access to it."}), 404
-    
+
     # get the messages for the conversation from cosmos
     conversation_messages = await cosmos_conversation_client.get_messages(user_id, conversation_id)
 
@@ -829,15 +829,15 @@ async def rename_conversation():
     ## check request for conversation_id
     request_json = await request.get_json()
     conversation_id = request_json.get('conversation_id', None)
-    
+
     if not conversation_id:
         return jsonify({"error": "conversation_id is required"}), 400
-    
+
     ## make sure cosmos is configured
     cosmos_conversation_client = init_cosmosdb_client()
     if not cosmos_conversation_client:
         raise Exception("CosmosDB is not configured or not working")
-    
+
     ## get the conversation from cosmos
     conversation = await cosmos_conversation_client.get_conversation(user_id, conversation_id)
     if not conversation:
@@ -869,17 +869,17 @@ async def delete_all_conversations():
         conversations = await cosmos_conversation_client.get_conversations(user_id, offset=0, limit=None)
         if not conversations:
             return jsonify({"error": f"No conversations for {user_id} were found"}), 404
-        
+
         # delete each conversation
         for conversation in conversations:
             ## delete the conversation messages from cosmos first
             deleted_messages = await cosmos_conversation_client.delete_messages(conversation['id'], user_id)
 
-            ## Now delete the conversation 
+            ## Now delete the conversation
             deleted_conversation = await cosmos_conversation_client.delete_conversation(user_id, conversation['id'])
         await cosmos_conversation_client.cosmosdb_client.close()
         return jsonify({"message": f"Successfully deleted conversation and messages for user {user_id}"}), 200
-    
+
     except Exception as e:
         logging.exception("Exception in /history/delete_all")
         return jsonify({"error": str(e)}), 500
@@ -889,15 +889,15 @@ async def clear_messages():
     ## get the user id from the request headers
     authenticated_user = get_authenticated_user_details(request_headers=request.headers)
     user_id = authenticated_user['user_principal_id']
-    
+
     ## check request for conversation_id
     request_json = await request.get_json()
     conversation_id = request_json.get('conversation_id', None)
 
-    try: 
+    try:
         if not conversation_id:
             return jsonify({"error": "conversation_id is required"}), 400
-        
+
         ## make sure cosmos is configured
         cosmos_conversation_client = init_cosmosdb_client()
         if not cosmos_conversation_client:
@@ -916,7 +916,7 @@ async def clear_messages():
 async def ensure_cosmos():
     if not AZURE_COSMOSDB_ACCOUNT:
         return jsonify({"error": "CosmosDB is not configured"}), 404
-    
+
     try:
         cosmos_conversation_client = init_cosmosdb_client()
         success, err = await cosmos_conversation_client.ensure()
@@ -924,7 +924,7 @@ async def ensure_cosmos():
             if err:
                 return jsonify({"error": err}), 422
             return jsonify({"error": "CosmosDB is not configured or not working"}), 500
-        
+
         await cosmos_conversation_client.cosmosdb_client.close()
         return jsonify({"message": "CosmosDB is configured and working"}), 200
     except Exception as e:
@@ -955,7 +955,7 @@ async def generate_title(conversation_messages):
             temperature=1,
             max_tokens=64
         )
-        
+
         title = json.loads(response.choices[0].message.content)['title']
         return title
     except Exception as e:

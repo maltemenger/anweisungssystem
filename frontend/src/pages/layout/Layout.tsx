@@ -11,10 +11,10 @@ import { CosmosDBStatus } from "../../api";
 const Layout = () => {
     const [isSharePanelOpen, setIsSharePanelOpen] = useState<boolean>(false);
     const [copyClicked, setCopyClicked] = useState<boolean>(false);
-    const [copyText, setCopyText] = useState<string>("Copy URL");
-    const [shareLabel, setShareLabel] = useState<string | undefined>("Share");
-    const [hideHistoryLabel, setHideHistoryLabel] = useState<string>("Hide chat history");
-    const [showHistoryLabel, setShowHistoryLabel] = useState<string>("Show chat history");
+    const [copyText, setCopyText] = useState<string>("URL kopieren");
+    const [shareLabel, setShareLabel] = useState<string | undefined>("Teilen");
+    const [hideHistoryLabel, setHideHistoryLabel] = useState<string>("Verberge Chat Historie");
+    const [showHistoryLabel, setShowHistoryLabel] = useState<string>("Zeige Chat-Historie");
     const appStateContext = useContext(AppStateContext)
     const ui = appStateContext?.state.frontendSettings?.ui;
 
@@ -49,12 +49,12 @@ const Layout = () => {
         const handleResize = () => {
           if (window.innerWidth < 480) {
             setShareLabel(undefined)
-            setHideHistoryLabel("Hide history")
-            setShowHistoryLabel("Show history")
+            setHideHistoryLabel("Verberge Chat Historie")
+            setShowHistoryLabel("Zeige Chat-Historie")
           } else {
-            setShareLabel("Share")
-            setHideHistoryLabel("Hide chat history")
-            setShowHistoryLabel("Show chat history")
+            setShareLabel("Teilen")
+            setHideHistoryLabel("Verberge Chat Historie")
+            setShowHistoryLabel("SZeige Chat-Historie")
           }
         };
     
