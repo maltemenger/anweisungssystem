@@ -48,11 +48,11 @@ const Layout = () => {
     useEffect(() => {
         const handleResize = () => {
           if (window.innerWidth < 480) {
-            setShareLabel(undefined)
+
             setHideHistoryLabel("Verberge Chat Historie")
             setShowHistoryLabel("Zeige Chat-Historie")
           } else {
-            setShareLabel("Teilen")
+
             setHideHistoryLabel("Verberge Chat Historie")
             setShowHistoryLabel("SZeige Chat-Historie")
           }
@@ -82,7 +82,6 @@ const Layout = () => {
                         {(appStateContext?.state.isCosmosDBAvailable?.status !== CosmosDBStatus.NotConfigured) &&
                             <HistoryButton onClick={handleHistoryClick} text={appStateContext?.state?.isChatHistoryOpen ? hideHistoryLabel : showHistoryLabel} />
                         }
-                        {ui?.show_share_button &&<ShareButton onClick={handleShareClick} text={shareLabel} />}
                     </Stack>
                 </Stack>
             </header>
